@@ -1,7 +1,4 @@
-using KeyBoardMouseHookWFDemo;
-using System.Diagnostics;
-
-namespace WinFormsApp1;
+namespace KeyBoardMouseHookWFDemo;
 
 internal static class Program {
 

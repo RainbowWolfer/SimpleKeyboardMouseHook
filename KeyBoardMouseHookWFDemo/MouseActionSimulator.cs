@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KeyBoardMouseHookWFDemo;
 
@@ -33,10 +29,17 @@ internal static class MouseActionSimulator {
 	private const uint MOUSEEVENTF_LEFTUP = 0x0004;
 	private const int INPUT_MOUSE = 0;
 
+	public static void GetScreenSize(out int width, out int height) {
+		// 获取鼠标当前所在的屏幕
+		Screen currentScreen = Screen.FromPoint(Cursor.Position);
+
+		// 获取当前屏幕的尺寸
+		width = currentScreen.Bounds.Width;
+		height = currentScreen.Bounds.Height;
+	}
+
 	public static void Click(int x, int y) {
-		// 获取屏幕分辨率
-		int screenWidth = Screen.PrimaryScreen.Bounds.Width;
-		int screenHeight = Screen.PrimaryScreen.Bounds.Height;
+		GetScreenSize(out int screenWidth, out int screenHeight);
 
 		// 将屏幕坐标转换为相对坐标（0-65535）
 		int absoluteX = (int)((double)x / screenWidth * 65535);
@@ -55,13 +58,14 @@ internal static class MouseActionSimulator {
 		inputs[2].type = INPUT_MOUSE;
 		inputs[2].mi.dwFlags = MOUSEEVENTF_LEFTUP;
 
-		SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT)));
+		uint result = SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>());
+		if (result == 0) {
+			throw new Win32Exception(Marshal.GetLastWin32Error());
+		}
 	}
 
 	public static void Move(int x, int y) {
-		// 获取屏幕分辨率
-		int screenWidth = Screen.PrimaryScreen.Bounds.Width;
-		int screenHeight = Screen.PrimaryScreen.Bounds.Height;
+		GetScreenSize(out int screenWidth, out int screenHeight);
 
 		// 将屏幕坐标转换为相对坐标（0-65535）
 		int absoluteX = (int)((double)x / screenWidth * 65535);
@@ -74,6 +78,9 @@ internal static class MouseActionSimulator {
 		inputs[0].mi.dx = absoluteX;
 		inputs[0].mi.dy = absoluteY;
 
-		SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT)));
+		uint result = SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>());
+		if (result == 0) {
+			throw new Win32Exception(Marshal.GetLastWin32Error());
+		}
 	}
 }
