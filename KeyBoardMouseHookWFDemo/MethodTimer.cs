@@ -8,7 +8,8 @@ namespace KeyBoardMouseHookWFDemo;
 
 [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>")]
 [SuppressMessage("Interoperability", "SYSLIB1054:Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time", Justification = "<Pending>")]
-internal class MethodTimer : IMethod {
+internal class MethodTimer : IMethod
+{
 
 	private readonly Timer timer;
 
@@ -16,7 +17,8 @@ internal class MethodTimer : IMethod {
 
 	private readonly IntPtr hookID;
 
-	public MethodTimer() {
+	public MethodTimer()
+	{
 		timer = new Timer(TimeSpan.FromMilliseconds(10));
 		timer.Elapsed += OnTimedEvent;
 		timer.AutoReset = true;
@@ -24,14 +26,16 @@ internal class MethodTimer : IMethod {
 		hookID = SetHook(HookCallback);
 	}
 
-	public void Dispose() {
+	public void Dispose()
+	{
 		GC.SuppressFinalize(this);
 		timer.Stop();
 		timer.Dispose();
 		UnhookWindowsHookEx(hookID);
 	}
 
-	private static IntPtr SetHook(LowLevelKeyboardProc proc) {
+	private static IntPtr SetHook(LowLevelKeyboardProc proc)
+	{
 		using Process curProcess = Process.GetCurrentProcess();
 		using ProcessModule? curModule = curProcess.MainModule;
 		return SetWindowsHookEx(WH_KEYBOARD_LL, proc, GetModuleHandle(curModule!.ModuleName), 0);
@@ -39,19 +43,27 @@ internal class MethodTimer : IMethod {
 
 	private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-	private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam) {
-		if (nCode >= 0) {
+	private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+	{
+		if (nCode >= 0)
+		{
 			int vkCode = Marshal.ReadInt32(lParam);
 			Keys key = (Keys)vkCode;
-			if (key == Keys.LControlKey || key == Keys.RControlKey) {
-				if (wParam == WM_KEYDOWN) {
+			if (key is Keys.LControlKey or Keys.RControlKey)
+			{
+				if (wParam == WM_KEYDOWN)
+				{
 					isControlDown = true;
 					return 1;
-				} else if (wParam == WM_KEYUP) {
+				}
+				else if (wParam == WM_KEYUP)
+				{
 					isControlDown = false;
 					return 1;
 				}
-			} else if (wParam == WM_KEYDOWN && key == Keys.Space) {
+			}
+			else if (wParam == WM_KEYDOWN && key == Keys.Space)
+			{
 				MouseActionSimulator.Click(Cursor.Position.X, Cursor.Position.Y);
 				return 1;
 			}
@@ -59,30 +71,36 @@ internal class MethodTimer : IMethod {
 		return CallNextHookEx(hookID, nCode, wParam, lParam);
 	}
 
-	private void OnTimedEvent(object? source, ElapsedEventArgs e) {
+	private void OnTimedEvent(object? source, ElapsedEventArgs e)
+	{
 		double speed = 10;
-		if (isControlDown) {
+		if (isControlDown)
+		{
 			speed *= 3;
 		}
 		int _speed = (int)speed;
 
 		//up
-		if (GetAsyncKeyState(Keys.W) < 0) {
+		if (GetAsyncKeyState(Keys.W) < 0)
+		{
 			Cursor.Position = new Point(Cursor.Position.X, Cursor.Position.Y - _speed);
 		}
 
 		//down
-		if (GetAsyncKeyState(Keys.S) < 0) {
+		if (GetAsyncKeyState(Keys.S) < 0)
+		{
 			Cursor.Position = new Point(Cursor.Position.X, Cursor.Position.Y + _speed);
 		}
 
 		//left
-		if (GetAsyncKeyState(Keys.A) < 0) {
+		if (GetAsyncKeyState(Keys.A) < 0)
+		{
 			Cursor.Position = new Point(Cursor.Position.X - _speed, Cursor.Position.Y);
 		}
 
 		//right
-		if (GetAsyncKeyState(Keys.D) < 0) {
+		if (GetAsyncKeyState(Keys.D) < 0)
+		{
 			Cursor.Position = new Point(Cursor.Position.X + _speed, Cursor.Position.Y);
 		}
 	}

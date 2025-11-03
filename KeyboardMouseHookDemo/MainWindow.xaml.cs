@@ -1,19 +1,21 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Input;
 
-namespace KeyboardMouseHookDemo; 
+namespace KeyboardMouseHookDemo;
 
-public partial class MainWindow : Window {
+public partial class MainWindow : Window
+{
 
 
-	public MainWindow() {
+	public MainWindow()
+	{
 		InitializeComponent();
 		_hookID = SetHook(_proc);
 	}
 
-	protected override void OnClosed(EventArgs e) {
+	protected override void OnClosed(EventArgs e)
+	{
 		UnhookWindowsHookEx(_hookID);
 		base.OnClosed(e);
 	}
@@ -21,29 +23,34 @@ public partial class MainWindow : Window {
 	private static LowLevelKeyboardProc _proc = HookCallback;
 	private static IntPtr _hookID = IntPtr.Zero;
 
-	private static IntPtr SetHook(LowLevelKeyboardProc proc) {
-		using (var curProcess = Process.GetCurrentProcess())
-		using (var curModule = curProcess.MainModule) {
-			return SetWindowsHookEx(WH_KEYBOARD_LL, proc,
-				GetModuleHandle(curModule.ModuleName), 0);
-		}
+	private static IntPtr SetHook(LowLevelKeyboardProc proc)
+	{
+		using Process curProcess = Process.GetCurrentProcess();
+		using ProcessModule? curModule = curProcess.MainModule;
+		return SetWindowsHookEx(WH_KEYBOARD_LL, proc, GetModuleHandle(curModule.ModuleName), 0);
 	}
 
-	private delegate IntPtr LowLevelKeyboardProc(
-		int nCode, IntPtr wParam, IntPtr lParam);
+	private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-	private static IntPtr HookCallback(
-		int nCode, IntPtr wParam, IntPtr lParam) {
-		if (nCode >= 0 && wParam == WM_KEYDOWN) {
+	private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+	{
+		if (nCode >= 0 && wParam == WM_KEYDOWN)
+		{
 			int vkCode = Marshal.ReadInt32(lParam);
-			switch (vkCode) {
+			GetCursorPos(out POINT lpPoint);
+			switch (vkCode)
+			{
 				case 87://w
+					SetCursorPos(lpPoint.X, lpPoint.Y - 10);
 					break;
 				case 65://a
+					SetCursorPos(lpPoint.X - 10, lpPoint.Y);
 					break;
 				case 83://s
+					SetCursorPos(lpPoint.X, lpPoint.Y + 10);
 					break;
 				case 68://d
+					SetCursorPos(lpPoint.X + 10, lpPoint.Y);
 					break;
 				default:
 					break;
@@ -83,4 +90,19 @@ public partial class MainWindow : Window {
 
 	[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
 	private static extern IntPtr GetModuleHandle(string lpModuleName);
+
+
+	[DllImport("User32.dll")]
+	private static extern bool SetCursorPos(int X, int Y);
+
+	[DllImport("User32.dll")]
+	[return: MarshalAs(UnmanagedType.Bool)]
+	private static extern bool GetCursorPos(out POINT lpPoint);
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct POINT
+	{
+		public int X;
+		public int Y;
+	}
 }

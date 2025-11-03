@@ -3,12 +3,14 @@ using System.Runtime.InteropServices;
 
 namespace KeyBoardMouseHookWFDemo;
 
-internal static class MouseActionSimulator {
+internal static class MouseActionSimulator
+{
 	[DllImport("user32.dll", SetLastError = true)]
 	private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
 
 	[StructLayout(LayoutKind.Sequential)]
-	public struct MOUSEINPUT {
+	public struct MOUSEINPUT
+	{
 		public int dx;
 		public int dy;
 		public uint mouseData;
@@ -18,7 +20,8 @@ internal static class MouseActionSimulator {
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	public struct INPUT {
+	public struct INPUT
+	{
 		public uint type;
 		public MOUSEINPUT mi;
 	}
@@ -29,7 +32,8 @@ internal static class MouseActionSimulator {
 	private const uint MOUSEEVENTF_LEFTUP = 0x0004;
 	private const int INPUT_MOUSE = 0;
 
-	public static void GetScreenSize(out int width, out int height) {
+	public static void GetScreenSize(out int width, out int height)
+	{
 		// 获取鼠标当前所在的屏幕
 		Screen currentScreen = Screen.FromPoint(Cursor.Position);
 
@@ -38,7 +42,8 @@ internal static class MouseActionSimulator {
 		height = currentScreen.Bounds.Height;
 	}
 
-	public static void Click(int x, int y) {
+	public static void Click(int x, int y)
+	{
 		GetScreenSize(out int screenWidth, out int screenHeight);
 
 		// 将屏幕坐标转换为相对坐标（0-65535）
@@ -59,12 +64,14 @@ internal static class MouseActionSimulator {
 		inputs[2].mi.dwFlags = MOUSEEVENTF_LEFTUP;
 
 		uint result = SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>());
-		if (result == 0) {
+		if (result == 0)
+		{
 			throw new Win32Exception(Marshal.GetLastWin32Error());
 		}
 	}
 
-	public static void Move(int x, int y) {
+	public static void Move(int x, int y)
+	{
 		GetScreenSize(out int screenWidth, out int screenHeight);
 
 		// 将屏幕坐标转换为相对坐标（0-65535）
@@ -79,7 +86,8 @@ internal static class MouseActionSimulator {
 		inputs[0].mi.dy = absoluteY;
 
 		uint result = SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>());
-		if (result == 0) {
+		if (result == 0)
+		{
 			throw new Win32Exception(Marshal.GetLastWin32Error());
 		}
 	}

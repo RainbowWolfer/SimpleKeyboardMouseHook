@@ -1,5 +1,6 @@
 ﻿namespace KeyBoardMouseHookWFDemo;
 
-public interface IMethod : IDisposable {
+public interface IMethod : IDisposable
+{
 
 }
