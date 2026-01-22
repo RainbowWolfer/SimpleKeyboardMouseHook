@@ -2,11 +2,11 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 ; Non-commercial use only
 
-#define MyAppName "Keyboard Mouse Hook"
-#define MyAppName2 "KeyboardMouseHook"
-#define MyAppVersion "1.0.4"
+#define MyAppName "Simple Keyboard Mouse Hook"
+#define MyAppName2 "SimpleKeyboardMouseHook"
+#define MyAppVersion "1.0.5"
 #define MyAppPublisher "RainbowWolfer"
-#define MyAppURL "https://github.com/RainbowWolfer/KeyboardMouseHook"
+#define MyAppURL "https://github.com/RainbowWolfer/SimpleKeyboardMouseHook"
 #define MyAppExeName "KeyboardMouseHook.exe"
 
 [Setup]

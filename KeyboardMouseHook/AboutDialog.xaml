@@ -1,12 +1,12 @@
 ﻿<Window
-	x:Class="KeyboardMouseHook.AboutDialog"
+	x:Class="SimpleKeyboardMouseHook.AboutDialog"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:local="clr-namespace:KeyboardMouseHook"
+	xmlns:local="clr-namespace:SimpleKeyboardMouseHook"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	Width="330"
-	Height="140"
+	Width="390"
+	Height="160"
 	ResizeMode="NoResize"
 	ShowInTaskbar="True"
 	Topmost="False"
@@ -36,18 +36,24 @@
 			Grid.Column="1"
 			Margin="0,4"
 			FontSize="18"
-			Text="Keyboard Mouse Hook"/>
+			Text="Simple Keyboard Mouse Hook"/>
 
 		<StackPanel
 			Grid.Row="1"
 			Grid.Column="1"
 			Margin="0,4"
 			VerticalAlignment="Top">
-			<TextBlock x:Name="VersionText" d:Text="v1.0" FontSize="16"/>
-			<TextBlock FontSize="14" Text="By RainbowWolfer"/>
+			<TextBlock x:Name="VersionText"
+				d:Text="v1.0"
+				Margin="0,-10,0,0"
+				FontSize="16"/>
+			<Border Height="4"/>
+			<TextBlock FontSize="14" Text="By RainbowWolfer (R.Wolfer)"/>
 			<TextBlock>
-				<Hyperlink NavigateUri="https://github.com/RainbowWolfer/KeyboardMouseHook" RequestNavigate="Hyperlink_RequestNavigate">Github</Hyperlink>
+				<Hyperlink NavigateUri="https://github.com/RainbowWolfer/SimpleKeyboardMouseHook" RequestNavigate="Hyperlink_RequestNavigate">Github</Hyperlink>
 			</TextBlock>
+			<Border Height="4"/>
+			<TextBlock x:Name="FrameworkText" d:Text="Using DotNet 100" FontSize="12"/>
 		</StackPanel>
 	</Grid>
 

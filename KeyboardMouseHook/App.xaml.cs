@@ -9,13 +9,13 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
-namespace KeyboardMouseHook;
+namespace SimpleKeyboardMouseHook;
 
 public partial class App : Application
 {
 
-	public const string Token = "RW.KeyboardMouseHook.WPF";
-	public const string AppName = "Keyboard Mouse Hook";
+	public const string Token = "RW.SimpleKeyboardMouseHook.WPF";
+	public const string AppName = "Simple Keyboard Mouse Hook";
 
 	private static readonly Mutex mutex;
 
@@ -75,7 +75,7 @@ public partial class App : Application
 		{
 			Token = Token,
 			Text = AppName,
-			Icon = new BitmapImage(new Uri(@"pack://application:,,,/KeyboardMouseHook;component/AppIcon.png")),
+			Icon = new BitmapImage(new Uri(@"pack://application:,,,/SimpleKeyboardMouseHook;component/AppIcon.png")),
 			IsBlink = false,
 			Visibility = Visibility.Visible,
 		};

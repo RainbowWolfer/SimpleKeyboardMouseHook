@@ -7,5 +7,5 @@
     <File Path="nuget.config" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="KeyboardMouseHook/KeyboardMouseHook.csproj" />
+  <Project Path="KeyboardMouseHook/SimpleKeyboardMouseHook.csproj" />
 </Solution>
