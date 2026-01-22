@@ -1,4 +1,4 @@
-# KeyboardMouseHook
+# SimpleKeyboardMouseHook
 
 Use WASD to move the cursor.  
 Use the Space Bar to simulate mouse down and mouse up.  
